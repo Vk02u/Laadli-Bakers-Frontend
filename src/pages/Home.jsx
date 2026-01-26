@@ -41,7 +41,7 @@ export default function Home() {
 		setSubmitStatus('submitting')
 
 		try {
-			const res = await fetch('/api/reviews', {
+			const res = await fetch('https://laadli-bakers-backend.onrender.com/api/reviews', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(reviewForm)

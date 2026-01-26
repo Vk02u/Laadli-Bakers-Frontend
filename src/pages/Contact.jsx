@@ -266,7 +266,7 @@ export default function Contact() {
             className="btn"
             type="button"
             onClick={async () => {
-              await fetch("/api/query", {
+              await fetch("https://laadli-bakers-backend.onrender.com/api/query", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),

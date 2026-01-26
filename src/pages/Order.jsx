@@ -19,7 +19,7 @@ export default function Order() {
     let ignore = false
     async function loadCakes() {
       try {
-        const res = await fetch('/api/cakes')
+        const res = await fetch('https://laadli-bakers-backend.onrender.com/api/cakes')
         if (!res || !res.ok) return
         const data = await res.json()
         if (!ignore) setCakes(Array.isArray(data) ? data : [])
@@ -55,7 +55,7 @@ export default function Order() {
     if (!validate()) return
 
     try {
-      const res = await fetch('/api/orders', {
+      const res = await fetch('https://laadli-bakers-backend.onrender.com/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
