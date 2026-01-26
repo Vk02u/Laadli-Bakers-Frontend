@@ -19,14 +19,14 @@ export default function Home() {
 
 	useEffect(() => {
 		// Load analytics for completed orders count
-		fetch('/api/analytics', {
+		fetch('https://laadli-bakers-backend.onrender.com/api/analytics', {
 			headers: getAuthHeaders()
 		  }).then(res => res.json())
 			.then(data => setStats(prev => ({ ...prev, completedOrders: data.completedOrders + 500 })))
 			.catch(err => console.error('Failed to load analytics'))
 
 		// Load pinned reviews only
-		fetch('/api/reviews')
+		fetch('https://laadli-bakers-backend.onrender.com/api/reviews')
 			.then(res => res.json())
 			.then(data => {
 				const pinnedReviews = data.filter(review => review.pinned)
