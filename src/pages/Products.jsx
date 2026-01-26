@@ -28,7 +28,7 @@ export default function Products() {
       try {
         let res = await fetch('/api/cakes', { method: 'GET', headers: { 'Content-Type': 'application/json' } }).catch(() => null)
         if (!res || !res.ok) {
-          res = await fetch('http://localhost:4000/api/cakes', { method: 'GET', headers: { 'Content-Type': 'application/json' } }).catch(() => null)
+          res = await fetch('https://laadli-bakers-backend.onrender.com/api/cakes', { method: 'GET', headers: { 'Content-Type': 'application/json' } }).catch(() => null)
         }
         if (!res || !res.ok) {
           if (!ignore) setError('Backend server is not running. Please start the backend server on port 4000.')

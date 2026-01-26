@@ -62,9 +62,9 @@ export default function Admin() {
       try {
         const headers = getAuthHeaders()
         const [cakesRes, ordersRes, reviewsRes] = await Promise.all([
-          fetch('http://localhost:4000/api/cakes'),
-          fetch('http://localhost:4000/api/orders', { headers }),
-          fetch('http://localhost:4000/api/reviews'),
+          fetch('https://laadli-bakers-backend.onrender.com/api/cakes'),
+          fetch('https://laadli-bakers-backend.onrender.com/api/orders', { headers }),
+          fetch('https://laadli-bakers-backend.onrender.com/api/reviews'),
         ])
         const [cakesData, ordersData, reviewsData] = await Promise.all([
           cakesRes.json(),
@@ -119,7 +119,7 @@ export default function Admin() {
 
     const payload = buildCakePayload()
 
-    const res = await fetch('http://localhost:4000/api/cakes', {
+    const res = await fetch('https://laadli-bakers-backend.onrender.com/api/cakes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -151,7 +151,7 @@ export default function Admin() {
 
     const payload = buildCakePayload()
 
-    const res = await fetch(`http://localhost:4000/api/cakes/${editingId}`, {
+    const res = await fetch(`https://laadli-bakers-backend.onrender.com/api/cakes/${editingId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
@@ -167,7 +167,7 @@ export default function Admin() {
 
   async function removeCake(id) {
     if (!window.confirm('Delete this cake permanently?')) return
-    const res = await fetch(`http://localhost:4000/api/cakes/${id}`, { method: 'DELETE' })
+    const res = await fetch(`https://laadli-bakers-backend.onrender.com/api/cakes/${id}`, { method: 'DELETE' })
     if (res.ok) setCakes(prev => prev.filter(c => c.id !== id))
   }
 
@@ -178,7 +178,7 @@ export default function Admin() {
 
     try {
     const res = await fetch(
-        `http://localhost:4000/api/orders/${order.id}/status`,
+        `https://laadli-bakers-backend.onrender.com/api/orders/${order.id}/status`,
         {
           method: 'PUT',
           headers: {
@@ -210,7 +210,7 @@ export default function Admin() {
 
   async function deleteOrder(orderId) {
     if (!window.confirm('Delete this order?')) return
-    const res = await fetch(`http://localhost:4000/api/orders/${orderId}`, {
+    const res = await fetch(`https://laadli-bakers-backend.onrender.com/api/orders/${orderId}`, {
       method: 'DELETE',
       headers: getAuthHeaders()
     })
@@ -223,7 +223,7 @@ export default function Admin() {
   // Reviews management functions
   async function deleteReview(reviewId) {
     if (!window.confirm('Delete this review permanently?')) return
-    const res = await fetch(`http://localhost:4000/api/reviews/${reviewId}`, {
+    const res = await fetch(`https://laadli-bakers-backend.onrender.com/api/reviews/${reviewId}`, {
       method: 'DELETE',
       headers: getAuthHeaders()
     })
@@ -231,7 +231,7 @@ export default function Admin() {
   }
 
   async function togglePinReview(reviewId) {
-    const res = await fetch(`http://localhost:4000/api/reviews/${reviewId}/pin`, {
+    const res = await fetch(`https://laadli-bakers-backend.onrender.com/api/reviews/${reviewId}/pin`, {
       method: 'PATCH',
       headers: getAuthHeaders()
     })

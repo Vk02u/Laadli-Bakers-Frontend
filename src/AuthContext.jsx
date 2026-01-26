@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 
 const AuthContext = createContext()
-const API_BASE_URL = 'http://localhost:4000'
+const API_BASE_URL = 'https://laadli-bakers-backend.onrender.com/'
 
 export function useAuth() {
   return useContext(AuthContext)
