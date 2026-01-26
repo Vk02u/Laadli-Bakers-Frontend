@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import cakeLogo from '../images_cake/cake_logo.jpeg';
+import cakeLogo from '/images_cake/cake_logo.jpeg';
 import { useAuth } from '../AuthContext'
 
 export default function Home() {

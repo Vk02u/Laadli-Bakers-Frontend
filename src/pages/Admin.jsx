@@ -467,7 +467,7 @@ export default function Admin() {
               <label>
                 <span>Image paths (comma separated)</span>
                 <input
-                  placeholder="/src/images_cake/bs_1.jpg, /src/images_cake/bs_2.jpg"
+                  placeholder="/images_cake/bs_1.jpg, /images_cake/bs_2.jpg"
                   value={form.imagesText}
                   onChange={e =>
                     setForm(f => ({ ...f, imagesText: e.target.value }))
