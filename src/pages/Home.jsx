@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import cakeLogo from '/images_cake/cake_logo.jpeg';
 import { useAuth } from '../AuthContext'
@@ -16,7 +16,41 @@ export default function Home() {
 	const [currentSlide, setCurrentSlide] = useState(0)
 	const { logout, getAuthHeaders } = useAuth()
 
+	// Touch/swipe handling for reviews carousel (mobile)
+	const touchStartX = useRef(null)
+	const touchCurrentX = useRef(null)
 
+	const handleTouchStart = (e) => {
+		if (!e.touches || e.touches.length === 0) return
+		touchStartX.current = e.touches[0].clientX
+	}
+
+	const handleTouchMove = (e) => {
+		if (!e.touches || e.touches.length === 0) return
+		touchCurrentX.current = e.touches[0].clientX
+	}
+
+	const handleTouchEnd = () => {
+		if (touchStartX.current == null || touchCurrentX.current == null) {
+			touchStartX.current = null
+			touchCurrentX.current = null
+			return
+		}
+
+		const delta = touchStartX.current - touchCurrentX.current
+		const threshold = 50 // minimum px to consider a swipe
+
+		if (delta > threshold) {
+			// Swipe left -> next slide
+			setCurrentSlide(prev => Math.min(Math.ceil(reviews.length / 3) - 1, prev + 1))
+		} else if (delta < -threshold) {
+			// Swipe right -> previous slide
+			setCurrentSlide(prev => Math.max(0, prev - 1))
+		}
+
+		touchStartX.current = null
+		touchCurrentX.current = null
+	}
 	useEffect(() => {
 		// Load analytics for completed orders count
 		fetch('https://laadli-bakers-backend.onrender.com/api/analytics', {
@@ -117,11 +151,16 @@ export default function Home() {
 					{/* Reviews Carousel */}
 					{reviews.length > 0 && (
 						<div style={{ marginBottom: '40px', position: 'relative' }}>
-							<div style={{
-								display: 'flex',
-								overflow: 'hidden',
-								width: '100%'
-							}}>
+							<div
+								style={{
+									display: 'flex',
+									overflow: 'hidden',
+									width: '100%'
+								}}
+								onTouchStart={handleTouchStart}
+								onTouchMove={handleTouchMove}
+								onTouchEnd={handleTouchEnd}
+							>
 								<div
 									style={{
 										display: 'flex',
