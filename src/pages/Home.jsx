@@ -76,18 +76,7 @@ export default function Home() {
 		<section className="home">
 			<div className="hero">
 				{/* Cake Logo Image from src/images cake/cake logo.jpeg */}
-				<img
-	src={cakeLogo}
-	alt="Cake House Logo"
-	className="hero-cake-img"
-	style={{
-		width: '380px',         // You can increase this as needed
-		height: 'auto',         // Keeps the aspect ratio correct
-		marginBottom: '32px',   // Optional spacing
-		display: 'block',
-		margin: '0 auto'        // Center the image
-	}}
-/>
+				<img src={cakeLogo} alt="Cake House Logo" className="hero-cake-img" />
 				<div className="hero-box">
 					<span className="badge">Since 2024</span>
 					<h1>Freshly Baked Happiness</h1>
