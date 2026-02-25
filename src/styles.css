@@ -738,10 +738,35 @@ p {
   object-fit: cover;
 }
 
+/* Small hero logo inside the hero card (mobile-first, hidden on larger screens) */
+.hero-box-logo {
+  display: none;
+}
+
 @media (max-width: 600px) {
   .hero-cake-img {
-    width: 140px;
-    height: 140px;
-    margin-bottom: 20px;
+    display: none;
+  }
+
+  .hero-box-logo {
+    display: block;
+    width: 170px;
+    height: 170px;
+    max-width: 60vw;
+    max-height: 60vw;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    border: 6px solid var(--white);
+    background: var(--white);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    object-fit: contain;
+  }
+
+  .home .hero {
+    padding-top: 80px;
+  }
+
+  .home .hero .hero-box {
+    padding-top: 72px;
   }
 }

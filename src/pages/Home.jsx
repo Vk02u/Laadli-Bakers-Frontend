@@ -112,6 +112,7 @@ export default function Home() {
 				{/* Cake Logo Image from src/images cake/cake logo.jpeg */}
 				<img src={cakeLogo} alt="Cake House Logo" className="hero-cake-img" />
 				<div className="hero-box">
+					<img src={cakeLogo} alt="Cake House Logo" className="hero-box-logo" />
 					<span className="badge">Since 2024</span>
 					<h1>Freshly Baked Happiness</h1>
 					<p>Welcome to Shree Laadli Ji Cake House. Delicious cakes made with love.</p>
