@@ -145,6 +145,9 @@ export default function Contact() {
                     color: "#e11d48",
                     fontWeight: 700,
                     letterSpacing: 1,
+                    whiteSpace: "nowrap",
+                    textAlign: "right",
+                    display: "inline-block",
                   }}
                 >
                   8:00 AM - 9:00 PM
@@ -175,6 +178,9 @@ export default function Contact() {
                     color: "#e11d48",
                     fontWeight: 700,
                     letterSpacing: 1,
+                    whiteSpace: "nowrap",
+                    textAlign: "right",
+                    display: "inline-block",
                   }}
                 >
                   9:00 AM - 8:00 PM
