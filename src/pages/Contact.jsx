@@ -272,7 +272,7 @@ export default function Contact() {
             className="btn"
             type="button"
             onClick={async () => {
-              await fetch("https://laadli-bakers-backend.onrender.com/api/query", {
+              await fetch("https://laadli-bakers-backend-production.up.railway.app/api/query", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),

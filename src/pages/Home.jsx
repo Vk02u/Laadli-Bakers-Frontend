@@ -53,14 +53,14 @@ export default function Home() {
 	}
 	useEffect(() => {
 		// Load analytics for completed orders count
-		fetch('https://laadli-bakers-backend.onrender.com/api/analytics', {
+		fetch('https://laadli-bakers-backend-production.up.railway.app/api/analytics', {
 			headers: getAuthHeaders()
 		  }).then(res => res.json())
 			.then(data => setStats(prev => ({ ...prev, completedOrders: data.completedOrders + 500 })))
 			.catch(err => console.error('Failed to load analytics'))
 
 		// Load pinned reviews only
-		fetch('https://laadli-bakers-backend.onrender.com/api/reviews')
+		fetch('https://laadli-bakers-backend-production.up.railway.app/api/reviews')
 			.then(res => res.json())
 			.then(data => {
 				const pinnedReviews = data.filter(review => review.pinned)
@@ -75,7 +75,7 @@ export default function Home() {
 		setSubmitStatus('submitting')
 
 		try {
-			const res = await fetch('https://laadli-bakers-backend.onrender.com/api/reviews', {
+			const res = await fetch('https://laadli-bakers-backend-production.up.railway.app/api/reviews', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(reviewForm)

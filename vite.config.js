@@ -6,7 +6,7 @@ export default defineConfig({
 	server: {
 		proxy: {
 			'/api': {
-				target: 'https://laadli-bakers-backend.onrender.com/',
+				target: 'https://laadli-bakers-backend-production.up.railway.app/',
 				changeOrigin: true
 			}
 		}

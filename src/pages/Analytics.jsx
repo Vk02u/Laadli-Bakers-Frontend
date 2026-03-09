@@ -33,7 +33,7 @@ export default function Analytics() {
   useEffect(() => {
     async function loadAnalytics() {
       try {
-        const res = await fetch('https://laadli-bakers-backend.onrender.com/api/analytics', {
+        const res = await fetch('https://laadli-bakers-backend-production.up.railway.app/api/analytics', {
           headers: getAuthHeaders()
         })
         if (!res.ok) return
