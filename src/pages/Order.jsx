@@ -37,6 +37,9 @@ export default function Order() {
     }))
   }
 
+  const cakeObj = cakes.find(c => c.name === form.cake) || null
+  const isCupcake = (cakeObj?.category === 'Cupcakes') || (form.category === 'Cupcakes')
+
   function validate() {
     const next = {}
     if (!form.name.trim()) next.name = 'Name is required'
@@ -44,7 +47,7 @@ export default function Order() {
     if (form.address.trim().length < 6) next.address = 'Address is too short'
     if (!form.category || form.category === 'All') next.category = 'Select a category'
     if (!form.cake) next.cake = 'Select a cake'
-    if (!form.weight) next.weight = 'Select weight'
+    if (!isCupcake && !form.weight) next.weight = 'Select weight'
     if (!form.deliveryDate) next.deliveryDate = 'Delivery date is required'
     setErrors(next)
     return Object.keys(next).length === 0
@@ -63,7 +66,7 @@ export default function Order() {
           phone: form.phone,
           address: form.address,
           cake: form.cake,
-          weight: form.weight,
+          weight: isCupcake ? 'per piece' : form.weight,
           quantity: Number(form.quantity) || 1,
           deliveryDate: form.deliveryDate,
         })
@@ -87,14 +90,6 @@ export default function Order() {
     return form.category === 'All' || c.category === form.category
   })
 
-  // find selected cake object
-  const selectedCake = cakes.find(c => String(c.id) === String(cakesForCategory.find(x => x.name === form.cake)?.id ?? (cakes.find(cc => cc.name === form.cake)?.id ?? '')) )
-    // Above ensures mapping by name when cake selected from filtered list.
-    // Simpler approach: we will instead find by name directly:
-  const selectedCakeByName = cakes.find(c => c.name === form.cake)
-  // use selectedCakeByName below
-  const cakeObj = selectedCakeByName || null
-
   // compute price for selected weight (robust handling)
   function computePrice(cake, weight) {
     if (!cake) return null
@@ -116,6 +111,7 @@ export default function Order() {
   }
 
   const priceForWeight = computePrice(cakeObj, form.weight)
+  const cupcakeTotal = isCupcake ? ((Number(cakeObj?.price) || 0) * (Number(form.quantity) || 1)) : null
 
   // For display: format number or fallback message
   function priceDisplay(val) {
@@ -158,7 +154,14 @@ export default function Order() {
                 <span>Category</span>
                 <select name="category" value={form.category} onChange={(e) => {
                   // selecting category resets cake selection
-                  setForm(prev => ({ ...prev, category: e.target.value, cake: '' }))
+                  setForm(prev => ({
+                    ...prev,
+                    category: e.target.value,
+                    cake: '',
+                    // keep a sensible default; cupcakes won't show weight anyway
+                    weight: prev.weight || '0.5kg',
+                    quantity: prev.quantity || 1,
+                  }))
                 }}>
                   {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                 </select>
@@ -177,6 +180,21 @@ export default function Order() {
               </label>
             </div>
 
+            {/* Cupcakes: show all flavors with per-piece prices */}
+            {form.category === 'Cupcakes' && cakesForCategory.length > 0 && (
+              <div style={{ marginTop: 6, color: 'var(--text-muted)', fontSize: 13 }}>
+                <div style={{ fontWeight: 600, marginBottom: 6, color: 'var(--text-primary)' }}>Cupcake flavors</div>
+                <div style={{ display: 'grid', gap: 6 }}>
+                  {cakesForCategory.map(c => (
+                    <div key={c.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
+                      <span>{c.name}</span>
+                      <span>Price per piece: <strong>{priceDisplay(c.price)}</strong></span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* if cake selected, show small preview + price info */}
             {cakeObj && (
               <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 6 }}>
@@ -193,17 +211,19 @@ export default function Order() {
             )}
 
             {/* Weight + Quantity */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 120px', gap: 12 }}>
-              <label>
-                <span>Weight</span>
-                <select name="weight" value={form.weight} onChange={handleChange}>
-                  {/* show 250g option (useful for Brownies) */}
-                  <option value="250g">250 g</option>
-                  <option value="0.5kg">½ kg</option>
-                  <option value="1kg">1 kg</option>
-                </select>
-                {errors.weight && <small className="error">{errors.weight}</small>}
-              </label>
+            <div style={{ display: 'grid', gridTemplateColumns: isCupcake ? '1fr' : '1fr 1fr', gap: 12 }}>
+              {!isCupcake && (
+                <label>
+                  <span>Weight</span>
+                  <select name="weight" value={form.weight} onChange={handleChange}>
+                    {/* show 250g option (useful for Brownies) */}
+                    <option value="250g">250 g</option>
+                    <option value="0.5kg">½ kg</option>
+                    <option value="1kg">1 kg</option>
+                  </select>
+                  {errors.weight && <small className="error">{errors.weight}</small>}
+                </label>
+              )}
 
               <label>
                 <span>Quantity</span>
@@ -212,9 +232,16 @@ export default function Order() {
             </div>
 
             {/* show computed price for selected cake+weight */}
-            {form.cake && (
+            {form.cake && !isCupcake && (
               <div style={{ marginTop: 8, marginBottom: 6, color: 'var(--text-muted)' }}>
                 Selected price: <strong>{ priceForWeight === null ? 'Not available / Contact for price' : `₹${priceForWeight}` }</strong>
+              </div>
+            )}
+            {form.cake && isCupcake && (
+              <div style={{ marginTop: 8, marginBottom: 6, color: 'var(--text-muted)' }}>
+                Price per piece: <strong>{priceDisplay(cakeObj?.price)}</strong>
+                {' '}
+                <span style={{ marginLeft: 10 }}>Total: <strong>₹{cupcakeTotal ?? 0}</strong></span>
               </div>
             )}
 
