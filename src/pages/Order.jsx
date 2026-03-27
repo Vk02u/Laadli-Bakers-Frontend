@@ -37,8 +37,13 @@ export default function Order() {
     }))
   }
 
-  const cakeObj = cakes.find(c => c.name === form.cake) || null
-  const isCupcake = (cakeObj?.category === 'Cupcakes') || (form.category === 'Cupcakes')
+  function normalize(value) {
+    return String(value ?? '').trim().toLowerCase()
+  }
+
+  function isCupcakeCategory(value) {
+    return normalize(value).includes('cupcake')
+  }
 
   function validate() {
     const next = {}
@@ -87,8 +92,16 @@ export default function Order() {
 
   // cakes filtered by selected category (if 'All', show all)
   const cakesForCategory = cakes.filter(c => {
-    return form.category === 'All' || c.category === form.category
+    if (form.category === 'All') return true
+    if (isCupcakeCategory(form.category)) return isCupcakeCategory(c.category)
+    return normalize(c.category) === normalize(form.category)
   })
+
+  // Prefer selected cake from current filtered list to avoid wrong duplicate-name match.
+  const cakeObj = cakesForCategory.find(c => c.name === form.cake)
+    || cakes.find(c => c.name === form.cake)
+    || null
+  const isCupcake = isCupcakeCategory(cakeObj?.category) || isCupcakeCategory(form.category)
 
   // compute price for selected weight (robust handling)
   function computePrice(cake, weight) {
@@ -179,21 +192,6 @@ export default function Order() {
                 {errors.cake && <small className="error">{errors.cake}</small>}
               </label>
             </div>
-
-            {/* Cupcakes: show all flavors with per-piece prices */}
-            {form.category === 'Cupcakes' && cakesForCategory.length > 0 && (
-              <div style={{ marginTop: 6, color: 'var(--text-muted)', fontSize: 13 }}>
-                <div style={{ fontWeight: 600, marginBottom: 6, color: 'var(--text-primary)' }}>Cupcake flavors</div>
-                <div style={{ display: 'grid', gap: 6 }}>
-                  {cakesForCategory.map(c => (
-                    <div key={c.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
-                      <span>{c.name}</span>
-                      <span>Price per piece: <strong>{priceDisplay(c.price)}</strong></span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
 
             {/* if cake selected, show small preview + price info */}
             {cakeObj && (
